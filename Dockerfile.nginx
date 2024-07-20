@@ -1,0 +1,20 @@
+FROM ubuntu:latest
+
+RUN apt-get update
+
+RUN apt-get install -y nginx
+
+
+# Supprimer les fichiers par défaut dans le répertoire HTML de Nginx
+RUN rm -rf /usr/share/nginx/html/*
+
+
+# Copier le contenu du site web dans le répertoire de Nginx
+COPY wpage.html /var/www/html/index.html
+COPY background.jpg /var/www/html/background.jpg
+
+# Exposer le port 80
+EXPOSE 80
+
+# Démarrer Nginx
+CMD ["nginx", "-g", "daemon off;"]

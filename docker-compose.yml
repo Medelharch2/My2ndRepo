@@ -1,0 +1,54 @@
+version: "3.8"
+services:
+
+ nginx:
+  build:
+    context: .
+    dockerfile: Dockerfile.nginx
+  container_name: mynginx
+  restart: always
+  ports:
+    - "8082:80"
+  volumes:
+    - monsite:/var/www/html
+  environment:
+    - monsite=/var/www/html
+
+#service 1 : postgresql
+ sgbd:
+  image: postgres:latest
+  restart: always
+  container_name: pgsql
+  ports:
+   - "5432:5432"
+  volumes:
+   - pgdata:/var/lib/postgresql/data/
+  environment:
+   - POSTGRES_PASSWORD=password
+   - POSTGRES_DB=mydatabase
+   - PGDATA=/var/lib/postgresql/data/
+
+
+#service 2 : pgadmin4
+ pgadmin:
+  image: dpage/pgadmin4
+  restart: always
+  container_name: pgadmin4
+  ports:
+   - "5050:80"
+  volumes:
+   - pgadmin:/var/lib/pgadmin
+  environment:
+   - PGADMIN_DEFAULT_EMAIL=admin@page.com
+   - PGADMIN_DEFAULT_PASSWORD=password
+   - pgadmin=/var/lib/pgadmin
+
+
+volumes:
+ pgdata:
+  external: true
+ pgadmin:
+  external: true
+ monsite:
+  external: true
+
